@@ -42,17 +42,17 @@
                                         <span
                                             style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
                                         <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                            Kepada YTH Bapak/Ibu {{ $param['spip']->nama_perusahaan }} <br>
+                                            Kepada YTH Bapak/Ibu PT {{ $param['spip']->nama_perusahaan }} <br>
 
-                                            Sehubungan karena masa {{ $param['spip']->jenis_unit }} unit
-                                            {{ $param['spip']->jenis_unit }} akan <br>
-                                            berakhir pada {{ $param['spip']->tanggal_expired->format('d-m-Y') }}. Maka
-                                            kami memberitahukan untuk segera dilakukan Recommisioning. <br>
-                                            Deadline: Max 30 hari setelah pemberitahuan ini di lakukan Recommisioning.
+                                            Sehubungan dengan masa berlaku unit {{ $param['spip']->jenis_unit }} {{ $param['spip']->merek }} nomor {{ $param['spip']->nomor_unit }} akan berakhir. <br> Maka kami memberitahukan untuk segera di lakukan Recommisioning. <br>
+
+                                            Deadline: Max 30 hari setelah pemberitahuan ini.
                                             <br>
                                             Terimakasih. Semangat Pagii!!!!!! <br>
 
-                                            Safety Always
+                                            <b>
+                                                Safety Always
+                                            </b> 
                                         </p>
                                     </td>
 

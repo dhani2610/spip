@@ -21,7 +21,7 @@
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             <!-- User -->
             <img src="{{ asset('assets/img/cover/flag-indo.png') }}" alt class="w-px-40 h-auto " />
-            <li class="nav-item navbar-dropdown dropdown-user dropdown d-none">
+            <li class="nav-item navbar-dropdown dropdown-user dropdown ">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
                         <img src="{{ asset('assets/img/logos/logo.png') }}" alt class="w-px-40 h-auto rounded-circle" />

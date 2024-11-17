@@ -1,31 +1,20 @@
 <style>
-    /* .layout-wrapper:not(.layout-horizontal) .bg-menu-theme .menu-inner .menu-item .menu-link {
-        color: white
-    } */
 
     .active-title {
         color: #white !important;
     }
-/* 
-    .bg-menu-theme .menu-inner>.menu-item.active>.menu-link {
-        color: red ! important;
-        background-color: white !important;
-        font-weight: 800
-    } */
 
-    /* .bg-menu-theme {
-        background: rgb(6, 193, 247);
-        background: linear-gradient(90deg, rgba(6, 193, 247, 1) 41%, rgba(6, 193, 247, 1) 85%);
-    }
 
     .menu-inner {
-        background: rgb(6, 193, 247);
-        background: linear-gradient(90deg, rgba(6, 193, 247, 1) 41%, rgba(6, 193, 247, 1) 85%);
-    } */
+        background: #3da601;
+    } 
+    .menu-vertical .menu-item .menu-link {
+        color: white    
+    }
 </style>
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"
     style="    border-right: 3px solid rgb(114 113 113 / 52%);">
-    <div class="app-brand demo mb-3">
+    <div class="app-brand demo ">
         <a href="#" class="app-brand-link">
             {{-- <span class="app-brand-logo demo">
 
@@ -46,7 +35,7 @@
 
     @endphp
 
-    <div class="menu-inner-shadow"></div>
+    <div class="menu-inner-shadow" style="background: #3da601!Important"></div>
 
     <ul class="menu-inner py-1">
         @php
@@ -79,7 +68,7 @@
                         <li class="menu-item {{ Request::routeIs('admin/admins') ? 'active' : '' }}">
                             <a href="{{ route('admin.admins.index') }}" class="menu-link">
                                 <div data-i18n="Without menu"
-                                    style="color : {{ Request::routeIs('admin/admins') ? '#f8dc5f' : '' }}">Users
+                                    style="color : {{ Request::routeIs('admin/admins') ? '#3da601' : '' }}">Users
                                 </div>
                             </a>
                         </li>
@@ -87,30 +76,6 @@
                     </ul>
                 </li>
             @endif
-
-
-            @if ($usr != null)
-                <form id="admin-logout-form" action="{{ route('admin.logout.submit') }}" method="POST"
-                    style="display: none;">
-                    @csrf
-                </form>
-                <li class="menu-item" style="    position: fixed;bottom: 1%">
-                    <a href="#" class="menu-link"
-                        onclick="event.preventDefault();
-                        document.getElementById('admin-logout-form').submit();">
-                        <i class="menu-icon tf-icons bx bx-power-off"></i>
-                        <div data-i18n="Dashboards">Log Out</div>
-                    </a>
-                </li>
-            @else
-                <li class="menu-item" style="    position: fixed;bottom: 1%">
-                    <a href="{{ url('admin/login') }}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-power-off"></i>
-                        <div data-i18n="Dashboards">Login</div>
-                    </a>
-                </li>
-            @endif
-
 
     </ul>
 </aside>

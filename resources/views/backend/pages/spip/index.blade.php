@@ -86,33 +86,23 @@
                                                         : null;
                                                     $status =
                                                         $expiredDate && $expiredDate->isFuture() ? 'Active' : 'Expired';
-
+                                                    $bg = $expiredDate && $expiredDate->isFuture() ? 'green' : 'red';
                                                     if ($expiredDate) {
-                                                        // Get absolute months and days difference
-                                                        $months = $now->diffInMonths($expiredDate, false); // false for negative differences
-                                                        $days = $now->diffInDays(
-                                                            $expiredDate->copy()->subMonths(abs($months)),
-                                                            false,
-                                                        ); // remaining days after months difference
+                                                        $days = $now->diffInDays($expiredDate, false); 
+                                                        $daysFormatted = abs(floor($days)); 
 
-                                                        // Ensure both are integers and format them as needed
-                                                        $months = (int) $months;
-                                                        $days = (int) $days;
-
-                                                        // Format the remaining time
                                                         $remaining =
-                                                            ($months < 0 ? $months : "+$months") .
-                                                            ' BULAN; ' .
-                                                            ($days < 0 ? $days : "+$days") .
-                                                            ' HARI';
+                                                        $days >= 0 ? "$daysFormatted Hari" : "0 Hari";
                                                     } else {
                                                         $remaining = '-';
                                                     }
+
                                                 @endphp
 
                                                 {{ $remaining }}
                                             </td>
-                                            <td>{{ $status }}</td>
+                                            <td style="color: white;background: {{ $bg }}">{{ $status }}
+                                            </td>
 
                                             <td>
                                                 @if ($spip->upload_foto)

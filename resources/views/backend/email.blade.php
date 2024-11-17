@@ -42,7 +42,7 @@
                                         <span
                                             style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
                                         <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                            Kepada YTH Bapak/Ibu PT {{ $param['spip']->perusahaan }} <br>
+                                            Kepada YTH Bapak/Ibu {{ $param['spip']->perusahaan }} <br>
 
                                             Sehubungan dengan masa berlaku unit {{ $param['spip']->jenis_unit }} {{ $param['spip']->merek }} nomor {{ $param['spip']->nomor_unit }} akan berakhir. <br> Maka kami memberitahukan untuk segera di lakukan Recommisioning. <br>
 

@@ -28,7 +28,13 @@ class SpipController extends Controller
     public function index(Request $request)
     {
         $data['page_title'] = 'SPIP';
-        $data['spips'] = Spip::where('type', $request->type)->orderBy('created_at', 'desc')->get();
+        $role = Auth::guard('admin')->user()->getRoleNames()->first();
+
+        if ($role != 'superadmin') {
+            $data['spips'] = Spip::where('type', $request->type)->where('user',Auth::guard('admin')->user()->id)->orderBy('created_at', 'desc')->get();
+        }else{
+            $data['spips'] = Spip::where('type', $request->type)->orderBy('created_at', 'desc')->get();
+        }
 
         return view('backend.pages.spip.index', $data);
     }

@@ -116,7 +116,7 @@
                                             accept="application/pdf">
                                         <br>
                                         @if ($spip->upload_foto)
-                                            File : <a href="{{ asset('assets/img/spip/' . $spip->upload_foto) }}"
+                                            File : <a href="{{ asset('documents/' . $spip->upload_foto) }}"
                                                 target="_blank">Download</a>
                                         @endif
                                         <br>

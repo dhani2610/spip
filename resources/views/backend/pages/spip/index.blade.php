@@ -106,7 +106,7 @@
 
                                             <td>
                                                 @if ($spip->upload_foto)
-                                                    <a href="{{ asset('assets/img/spip/' . $spip->upload_foto) }}"
+                                                    <a href="{{ asset('documents/' . $spip->upload_foto) }}"
                                                         target="_blank">Download</a>
                                                 @else
                                                     -

@@ -6,10 +6,13 @@ use App\Models\Spip;
 use App\Http\Controllers\Controller;
 use App\Mail\ReminderMail;
 use App\Models\Admin;
+use App\Models\FotoDeviasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
+use DB;
+use Illuminate\Support\Facades\File;
+
 
 class SpipController extends Controller
 {
@@ -69,18 +72,45 @@ class SpipController extends Controller
             $data->status = $request->status;
             $data->tanggal_expired = $request->tanggal_expired;
             $data->type = $request->type;
-            if ($request->hasFile('upload_foto')) {
-                $file = $request->file('upload_foto');
-                $name = time() . '.' . $file->getClientOriginalExtension();
-                $destinationPath = public_path('assets/img/spip/');
-                $file->move($destinationPath, $name);
-                $data->upload_foto = $name;
+
+            $dokumenval = $request->file('upload_foto');
+    
+            if ($dokumenval != null) {
+                $documentPath = public_path('documents/');
+                $documentName = $dokumenval->getClientOriginalName();
+                $i = 1;
+                while (file_exists($documentPath . $documentName)) {
+                    $documentName = pathinfo($dokumenval->getClientOriginalName(), PATHINFO_FILENAME) . "($i)." . $dokumenval->getClientOriginalExtension();
+                    $i++;
+                }
+                $dokumenval->move($documentPath, $documentName);
+                $data->upload_foto = $documentName;
             }
             $data->save();
+
+            if ($request->hasFile('foto_deviasi')) {
+                $no = 1;
+                foreach ($request->file('foto_deviasi') as $foto) {
+                    $fotoWisata = new FotoDeviasi();
+                    $fotoWisata->id_spip = $data->id;
+                    if ($foto) {
+                        $image = $foto;
+                        $name = $no++ . '-' . time() . '.' . $image->getClientOriginalExtension();
+                        $destinationPath = public_path('assets/img/foto_deviasi/');
+                        $image->move($destinationPath, $name);
+                        $fotoWisata->foto = $name;
+                    }
+                    $fotoWisata->save();
+                }
+            }
+
+            DB::commit();
 
             session()->flash('success', 'Data Berhasil Disimpan!');
             return redirect()->route('spip', ['type' => $request->type]);
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             session()->flash('failed', $th->getMessage());
             return redirect()->route('spip', ['type' => $request->type]);
         }
@@ -139,6 +169,8 @@ class SpipController extends Controller
         $data['page_title'] = 'Edit Data SPIP';
         $data['spip'] = Spip::find($id);
         $data['admins'] = Admin::orderBy('created_at', 'desc')->get();
+        $data['foto'] = FotoDeviasi::where('id_spip', $id)->get();
+
         return view('backend.pages.spip.edit', $data);
     }
 
@@ -162,13 +194,51 @@ class SpipController extends Controller
             $data->status = $request->status;
             $data->tanggal_expired = $request->tanggal_expired;
             $data->type = $request->type;
-            if ($request->hasFile('upload_foto')) {
-                $file = $request->file('upload_foto');
-                $name = time() . '.' . $file->getClientOriginalExtension();
-                $destinationPath = public_path('assets/img/spip/');
-                $file->move($destinationPath, $name);
-                $data->upload_foto = $name;
+            $dokumenval = $request->file('upload_foto');
+            if ($dokumenval != null) {
+                $documentPath = public_path('documents/');
+                $documentName = $dokumenval->getClientOriginalName();
+                $i = 1;
+                while (file_exists($documentPath . $documentName)) {
+                    $documentName = pathinfo($dokumenval->getClientOriginalName(), PATHINFO_FILENAME) . "($i)." . $dokumenval->getClientOriginalExtension();
+                    $i++;
+                }
+                $dokumenval->move($documentPath, $documentName);
+                $data->upload_foto = $documentName;
             }
+
+            
+            if ($request->has('old_photo')) {
+                $oldPhotos = $request->old_photo;
+                $existingPhotos = FotoDeviasi::where('id_spip', $id)->get();
+
+                foreach ($existingPhotos as $fotoDeviasi) {
+                    if (!in_array($fotoDeviasi->id, $oldPhotos)) {
+                        $filePath = public_path('assets/img/foto_deviasi/' . $fotoDeviasi->foto);
+                        if (File::exists($filePath)) {
+                            File::delete($filePath);
+                        }
+                        $fotoDeviasi->delete();
+                    }
+                }
+            }
+
+            if ($request->hasFile('foto_deviasi')) {
+                $no = 1;
+
+                foreach ($request->file('foto_deviasi') as $foto) {
+                    $image = $foto;
+                    $name = $no++ . '-' . time() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('assets/img/foto_deviasi/');
+                    $image->move($destinationPath, $name);
+
+                    FotoDeviasi::create([
+                        'id_spip' => $data->id,
+                        'foto' => $name
+                    ]);
+                }
+            }
+
             $data->save();
 
             session()->flash('success', 'Data Berhasil Disimpan!');
@@ -186,6 +256,17 @@ class SpipController extends Controller
     {
         try {
             $data = Spip::find($id);
+
+
+            $fotos = FotoDeviasi::where('id_course', $id)->get();
+            foreach ($fotos as $foto) {
+                $filePath = public_path('assets/img/foto_deviasi/' . $foto->foto);
+                if (File::exists($filePath)) {
+                    File::delete($filePath);
+                }
+                $foto->delete();
+            }
+
             $data->delete();
 
             session()->flash('success', 'Data Berhasil dihapus!');

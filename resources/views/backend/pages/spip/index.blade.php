@@ -53,7 +53,8 @@
                                         <th>Tanggal Expired</th>
                                         <th>Sisa Hari</th>
                                         <th>Status</th>
-                                        <th>Foto</th>
+                                        <th>File</th>
+                                        <th>Foto Deviasi</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -88,11 +89,10 @@
                                                         $expiredDate && $expiredDate->isFuture() ? 'Active' : 'Expired';
                                                     $bg = $expiredDate && $expiredDate->isFuture() ? 'green' : 'red';
                                                     if ($expiredDate) {
-                                                        $days = $now->diffInDays($expiredDate, false); 
-                                                        $daysFormatted = abs(floor($days)); 
+                                                        $days = $now->diffInDays($expiredDate, false);
+                                                        $daysFormatted = abs(floor($days));
 
-                                                        $remaining =
-                                                        $days >= 0 ? "$daysFormatted Hari" : "0 Hari";
+                                                        $remaining = $days >= 0 ? "$daysFormatted Hari" : '0 Hari';
                                                     } else {
                                                         $remaining = '-';
                                                     }
@@ -106,11 +106,54 @@
 
                                             <td>
                                                 @if ($spip->upload_foto)
-                                                    <img src="{{ asset('assets/img/spip/' . $spip->upload_foto) }}"
-                                                        alt="Foto SPIP" style="max-width: 100px;">
+                                                    <a href="{{ asset('assets/img/spip/' . $spip->upload_foto) }}"
+                                                        target="_blank">Download</a>
                                                 @else
                                                     -
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal{{ $spip->id }}">
+                                                    View
+                                                </button>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal{{ $spip->id }}" tabindex="-1"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Foto
+                                                                    Deviasi</h1>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                @php
+                                                                    $foto = App\Models\FotoDeviasi::where(
+                                                                        'id_spip',
+                                                                        $spip->id,
+                                                                    )->get();
+                                                                @endphp
+                                                                @foreach ($foto as $item)
+                                                                    <hr>
+                                                                    <center>
+                                                                        <img src="{{ asset('assets/img/foto_deviasi/' . $item->foto) }}"
+                                                                            alt="Foto SPIP" style="max-width: 300px;">
+                                                                    </center>
+                                                                    <hr>
+                                                                    <br>
+                                                                @endforeach
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
                                                 @if ($userRole == 'superadmin')
@@ -124,7 +167,7 @@
                                                     </a>
                                                     <a onclick="confirmDelete('{{ route('spip.destroy', $spip->id) }}?type={{ Request::get('type') }}')"
                                                         class="btn btn-danger text-white">
-                                                        <i class="fa fa-trash-o"></i>
+                                                        <i class="fa-solid fa-trash"></i>
                                                     </a>
                                                 @else
                                                     -

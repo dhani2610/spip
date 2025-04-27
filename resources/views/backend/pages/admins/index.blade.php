@@ -176,7 +176,7 @@
                                         @if (Auth::guard('admin')->user()->can('admin.delete'))
                                         <a class="btn btn-danger text-white" href="{{ route('admin.admins.destroy', $admin->id) }}"
                                         onclick="event.preventDefault(); document.getElementById('delete-form-{{ $admin->id }}').submit();">
-                                        <i class="fa fa-trash-o"></i>
+                                        <i class="fa fa-trash"></i>
                                         </a>
                                         <form id="delete-form-{{ $admin->id }}" action="{{ route('admin.admins.destroy', $admin->id) }}" method="POST" style="display: none;">
                                             @method('DELETE')

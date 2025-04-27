@@ -68,67 +68,28 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
-                'group_name' => 'barang.jasa',
+                'group_name' => 'group',
                 'permissions' => [
-                    'barang.jasa.create',
-                    'barang.jasa.view',
-                    'barang.jasa.edit',
-                    'barang.jasa.delete',
-                ]
-            ],
-            
-            [
-                'group_name' => 'merk',
-                'permissions' => [
-                    'merk.create',
-                    'merk.view',
-                    'merk.edit',
-                    'merk.delete',
+                    'group.create',
+                    'group.view',
+                    'group.edit',
+                    'group.delete',
                 ]
             ],
             [
-                'group_name' => 'satuan',
+                'group_name' => 'paket',
                 'permissions' => [
-                    'satuan.create',
-                    'satuan.view',
-                    'satuan.edit',
-                    'satuan.delete',
+                    'paket.create',
+                    'paket.view',
+                    'paket.edit',
+                    'paket.delete',
                 ]
             ],
             [
-                'group_name' => 'customer',
+                'group_name' => 'history',
                 'permissions' => [
-                    'customer.create',
-                    'customer.view',
-                    'customer.edit',
-                    'customer.delete',
-                ]
-            ],
-            [
-                'group_name' => 'pph',
-                'permissions' => [
-                    'pph.create',
-                    'pph.view',
-                    'pph.edit',
-                    'pph.delete',
-                ]
-            ],
-            [
-                'group_name' => 'transaksi',
-                'permissions' => [
-                    'transaksi.create',
-                    'transaksi.view',
-                    'transaksi.edit',
-                    'transaksi.delete',
-                    'transaksi.invoice',
-                    'transaksi.rekap',
-                    'transaksi.update.status',
-                ]
-            ],
-            [
-                'group_name' => 'laporan',
-                'permissions' => [
-                    'laporan.view',
+                    'history.view.all',
+                    'history.view.by.account',
                 ]
             ],
             

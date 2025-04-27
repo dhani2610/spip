@@ -71,29 +71,35 @@
                             <h4 class="mb-2">Register Here! 👋</h4>
                         </center>
 
-                        <form method="POST" action="{{ route('admin-register-store') }}">
+                        <form method="POST" action="{{ route('admin-register-store') }}" id="myForm">
                             @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Enter your Name" autofocus />
+                                    placeholder="Enter your Name" autofocus required/>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Enter your Username" autofocus />
+                                    placeholder="Enter your Username" autofocus required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">No WhatsApp</label>
+                                <input type="tel" class="form-control" id="whatsapp" name="no_wa"
+                                    placeholder="Enter your email" autofocus required />
+                                <div id="whatsappError" class="text-danger mt-1" style="display: none;">No WhatsApp harus diawali dengan "62"</div>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="Enter your email" autofocus />
+                                    placeholder="Enter your email" autofocus required/>
                             </div>
                             <div class="mb-3 form-password-toggle">
                                 <label for="email" class="form-label">Password</label>
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" name="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="password" />
+                                        aria-describedby="password" required/>
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
                             </div>
@@ -112,6 +118,32 @@
         </div>
     </div>
 
+    <script>
+          document.getElementById("whatsapp").addEventListener("input", function() {
+            let whatsappInput = document.getElementById("whatsapp");
+            let whatsappError = document.getElementById("whatsappError");
+            
+            // Hanya ambil angka
+            let number = whatsappInput.value.replace(/\D/g, ''); 
+            
+            // Pastikan selalu diawali dengan "62"
+            if (!number.startsWith("62")) {
+                number = "62" + number.replace(/^62/, '');
+            }
+
+            // Update input value
+            whatsappInput.value = number;
+
+            // Validasi panjang minimal (misal minimal 10 digit termasuk "62")
+            if (number.length < 10) {
+                whatsappError.style.display = "block";
+                whatsappInput.classList.add("is-invalid");
+            } else {
+                whatsappError.style.display = "none";
+                whatsappInput.classList.remove("is-invalid");
+            }
+        });
+    </script>
     <!-- / Content -->
 
     <!-- Core JS -->

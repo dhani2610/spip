@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,43 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', 'HomeController@redirectAdmin')->name('index');
+Route::get('/', 'BerandaController@home')->name('landing');
+Route::get('/login', 'HomeController@redirectAdmin')->name('index');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/admin/register', 'BerandaController@register')->name('admin-register');
 Route::post('/admin/register/store', 'BerandaController@registerStore')->name('admin-register-store');
+Route::post('/generate-snap-token/{id_paket}', 'BerandaController@generateSnapToken')->name('generate-snap-token');
+Route::get('/checkout/{id_paket}', 'BerandaController@checkout')->name('checkout');
+Route::post('/store-transaction', 'BerandaController@storeTransaction')->name('store-transaction');
+Route::get('/sendWhatsAppNotification/{no_wa}/{id_transaksi}', 'BerandaController@sendWhatsAppNotification')->name('sendWhatsAppNotification');
+Route::get('/success-payment', 'BerandaController@successPayment')->name('payment-success');
+Route::get('/check-auth', function () {
+    return response()->json([
+        'logged_in' => Auth::guard('admin')->check()
+    ]);
+});
+Route::get('/check-paket', function () {
 
+    if (Auth::guard('admin')->check() != null) {
+        $masa_aktif = Auth::guard('admin')->user()->expired_date;
+        if(!empty($masa_aktif)){
+            if($masa_aktif >= date('Y-m-d')){
+                $subs = 'Ya';
+            }else{
+                $subs = 'Tidak';
+            }
+        }else{
+            $subs = 'Tidak';
+        }
+    }else{
+        $subs = 'Tidak';
+    }
+    
+    return response()->json([
+        'is_subs' => $subs
+    ]);
+});
 /**
  * Admin routes
  */
@@ -35,14 +67,25 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('admins', 'Backend\AdminsController', ['names' => 'admin.admins']);
 
 
-    Route::group(['prefix' => 'spip'], function () {
-        Route::get('/', 'Backend\SpipController@index')->name('spip');
-        Route::get('send-reminder/{id}', 'Backend\SpipController@sendEmail')->name('spip.mail.reminder');
-        Route::get('create', 'Backend\SpipController@create')->name('spip.create');
-        Route::post('store', 'Backend\SpipController@store')->name('spip.store');
-        Route::get('edit/{id}', 'Backend\SpipController@edit')->name('spip.edit');
-        Route::post('update/{id}', 'Backend\SpipController@update')->name('spip.update');
-        Route::get('destroy/{id}', 'Backend\SpipController@destroy')->name('spip.destroy');
+    Route::group(['prefix' => 'group'], function () {
+        Route::get('/', 'Backend\GroupController@index')->name('group');
+        Route::get('create', 'Backend\GroupController@create')->name('group.create');
+        Route::post('store', 'Backend\GroupController@store')->name('group.store');
+        Route::get('edit/{id}', 'Backend\GroupController@edit')->name('group.edit');
+        Route::post('update/{id}', 'Backend\GroupController@update')->name('group.update');
+        Route::get('destroy/{id}', 'Backend\GroupController@destroy')->name('group.destroy');
+    });
+
+    Route::group(['prefix' => 'paket'], function () {
+        Route::get('/', 'Backend\PaketController@index')->name('paket');
+        Route::get('create', 'Backend\PaketController@create')->name('paket.create');
+        Route::post('store', 'Backend\PaketController@store')->name('paket.store');
+        Route::get('edit/{id}', 'Backend\PaketController@edit')->name('paket.edit');
+        Route::post('update/{id}', 'Backend\PaketController@update')->name('paket.update');
+        Route::get('destroy/{id}', 'Backend\PaketController@destroy')->name('paket.destroy');
+        Route::get('checkout/{id}', 'Backend\PaketController@checkout')->name('paket.checkout');
+        Route::get('payment-success', 'Backend\PaketController@successPage')->name('paket.payment-success');
+        Route::get('history', 'Backend\PaketController@history')->name('paket.history');
     });
 
     // Login Routes

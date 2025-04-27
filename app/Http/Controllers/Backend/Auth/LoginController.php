@@ -64,9 +64,9 @@ class LoginController extends Controller
 
             session()->flash('success', 'Successully Logged in !');
             if ($userRole == 'superadmin') {
-                return redirect()->route('spip', ['type' => 'Sarana']);
+                return redirect()->route('admin.dashboard');
             } else {
-                return redirect()->route('spip', ['type' => 'Sarana']);
+                return redirect()->route('admin.dashboard');
             }
         } else {
             // Search using username
@@ -75,9 +75,9 @@ class LoginController extends Controller
 
                 session()->flash('success', 'Successully Logged in !');
                 if ($userRole == 'superadmin') {
-                    return redirect()->route('spip', ['type' => 'Sarana']);
+                    return redirect()->route('admin.dashboard');
                 } else {
-                    return redirect()->route('spip', ['type' => 'Sarana']);
+                    return redirect()->route('admin.dashboard');
                 }
             }
             // error
